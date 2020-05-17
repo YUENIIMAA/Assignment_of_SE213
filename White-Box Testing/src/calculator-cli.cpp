@@ -348,6 +348,9 @@ void clean_up_mess()
 
 string Calculator::calculate(string input)
 {
+    var_table.clear();
+    ipt.clear();
+
     define_name("ANS", 0);
     ipt << input;
 
