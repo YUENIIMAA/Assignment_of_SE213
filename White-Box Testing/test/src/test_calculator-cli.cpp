@@ -1,6 +1,41 @@
 #include "gmock/gmock.h"
 #include "calculator-cli.hpp"
 
+TEST(Path, calculator)
+{
+    Calculator calculator;
+
+    EXPECT_EQ("0", calculator.calculate("0;"));
+    EXPECT_EQ("bad token", calculator.calculate("?"));
+    EXPECT_EQ("bad token", calculator.calculate("??"));
+    EXPECT_EQ("10", calculator.calculate("10;"));
+    EXPECT_EQ("bad token", calculator.calculate("0;?"));
+    EXPECT_EQ("bad token", calculator.calculate("0;??"));
+}
+
+TEST(Path, expression)
+{
+    Calculator calculator;
+
+    EXPECT_EQ("2", calculator.calculate("1+1;"));
+    EXPECT_EQ("0", calculator.calculate("1-1;"));
+    EXPECT_EQ("1", calculator.calculate("1;"));
+}
+
+TEST(Path, term)
+{
+    Calculator calculator;
+
+    EXPECT_EQ("4321", calculator.calculate("4321;"));
+    EXPECT_EQ("121", calculator.calculate("11*11;"));
+    EXPECT_EQ("divided by zero", calculator.calculate("1/0;"));
+    EXPECT_EQ("1.5", calculator.calculate("3/2;"));
+    EXPECT_EQ("left-hand operand of % not int", calculator.calculate("3.5%1;"));
+    EXPECT_EQ("right-hand operand of % not int", calculator.calculate("3%1.5;"));
+    EXPECT_EQ("divided by zero", calculator.calculate("3%0;"));
+    EXPECT_EQ("1", calculator.calculate("5%2;"));
+}
+
 TEST(Number, readSingleNumber)
 {
     Calculator calculator;
@@ -15,6 +50,34 @@ TEST(Number, readSingleNumber)
     EXPECT_EQ("7", calculator.calculate("7;"));
     EXPECT_EQ("8", calculator.calculate("8;"));
     EXPECT_EQ("9", calculator.calculate("9;"));
+}
+
+TEST(Path, primary)
+{
+    Calculator calculator;
+
+    EXPECT_EQ("')' expected", calculator.calculate("(1+2*3-4/5;"));
+    EXPECT_EQ("6", calculator.calculate("(1+2*3-4/4);"));
+    EXPECT_EQ("number should be int", calculator.calculate("(10.5)!;"));
+    EXPECT_EQ("number should be above zero", calculator.calculate("(-10)!;"));
+    EXPECT_EQ("1", calculator.calculate("(1-1)!;"));
+    EXPECT_EQ("1", calculator.calculate("(1-1)!;"));
+    EXPECT_EQ("2", calculator.calculate("(1+1)!;"));
+    EXPECT_EQ("5555", calculator.calculate("4321+1234;"));
+    EXPECT_EQ("number should be int", calculator.calculate("10.5!;"));
+    EXPECT_EQ("number should be above zero", calculator.calculate("(-2)!;"));
+    EXPECT_EQ("1", calculator.calculate("0!;"));
+    EXPECT_EQ("1", calculator.calculate("0!;"));
+    EXPECT_EQ("120", calculator.calculate("5!;"));
+    EXPECT_EQ("6", calculator.calculate("3!;"));
+    EXPECT_EQ("-1", calculator.calculate("-1;"));
+    EXPECT_EQ("1", calculator.calculate("+1;"));
+    EXPECT_EQ("6", calculator.calculate("1+2;ANS+3;"));
+    EXPECT_EQ("number should be int", calculator.calculate("3/2;ANS!;"));
+    EXPECT_EQ("number should be above zero", calculator.calculate("2-9;ANS!;"));
+    EXPECT_EQ("1", calculator.calculate("1-1;ANS!; "));
+    EXPECT_EQ("1", calculator.calculate("-1+1;ANS!;"));
+    EXPECT_EQ("120", calculator.calculate("2+3;ANS!;"));
 }
 
 TEST(Number, readMultipleNumber)
@@ -138,10 +201,10 @@ TEST(Overall, errorTest)
     EXPECT_EQ("number should be above zero", calculator.calculate("-1;ANS!;"));
     EXPECT_EQ("number should be above zero", calculator.calculate("(0-1)!;"));
     EXPECT_EQ("primary expected", calculator.calculate("();"));
-    EXPECT_EQ("left-hand operand of & not int", calculator.calculate("5.1%2;"));
-    EXPECT_EQ("right-hand operand of & not int", calculator.calculate("5%(2.1);"));
+    EXPECT_EQ("left-hand operand of % not int", calculator.calculate("5.1%2;"));
+    EXPECT_EQ("right-hand operand of % not int", calculator.calculate("5%(2.1);"));
     EXPECT_EQ("divided by zero", calculator.calculate("5%0;"));
-    EXPECT_EQ("divide by zero", calculator.calculate("1/0;"));
+    EXPECT_EQ("divided by zero", calculator.calculate("1/0;"));
     EXPECT_EQ("bad token", calculator.calculate("x+1;"));
     EXPECT_EQ("'(' expected", calculator.calculate("(1));"));
     EXPECT_EQ("')' expected", calculator.calculate("((1);"));
