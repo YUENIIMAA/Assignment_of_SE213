@@ -5,14 +5,6 @@ const char print = ';';
 const char number = '8';
 const char name = 'a';
 
-class Variable
-{
-public:
-    string name;
-    double value;
-    Variable(string n, double v) : name(n), value(v) {}
-};
-
 vector<Variable> var_table;
 
 void set_value(string s, double d)
@@ -30,14 +22,15 @@ void set_value(string s, double d)
 
 double get_value(string s)
 {
-    for (unsigned int i = 0; i < var_table.size(); ++i)
+    unsigned int i;
+    for (i = 0; i < var_table.size(); ++i)
     {
         if (var_table[i].name == s)
         {
-            return var_table[i].value;
+            break;
         }
     }
-    return 0;
+    return var_table[i].value;
 }
 
 double define_name(string var, double val)
@@ -45,30 +38,6 @@ double define_name(string var, double val)
     var_table.push_back(Variable(var, val));
     return val;
 }
-
-class Token
-{
-public:
-    char kind;
-    double value;
-    string name;
-    Token(char ch) : kind(ch), value(0) {}
-    Token(char ch, double val) : kind(ch), value(val) {}
-    Token(char ch, string n) : kind(ch), name(n) {}
-};
-
-class Token_stream
-{
-public:
-    Token_stream();
-    Token get();
-    void putback(Token t);
-    void ignore(char c);
-
-private:
-    bool full{false};
-    Token buffer;
-};
 
 void Token_stream::ignore(char c)
 {
@@ -282,7 +251,7 @@ double term()
         {
             double d = primary();
             if (d == 0)
-                throw runtime_error("divide by zero");
+                throw runtime_error("divided by zero");
             left /= d;
             t = ts.get();
             break;
@@ -293,12 +262,12 @@ double term()
             int i1 = int(left);
             if (i1 != left)
             {
-                throw runtime_error("left-hand operand of & not int");
+                throw runtime_error("left-hand operand of % not int");
             }
             int i2 = int(d);
             if (i2 != d)
             {
-                throw runtime_error("right-hand operand of & not int");
+                throw runtime_error("right-hand operand of % not int");
             }
             if (i2 == 0)
             {
@@ -380,11 +349,12 @@ string Calculator::calculate(string input)
         }
         catch (exception &e)
         {
-            clean_up_mess();
             if (!ipt.eof())
             {
+                clean_up_mess();
                 return e.what();
             }
+            clean_up_mess();
         }
     }
     string retval;
