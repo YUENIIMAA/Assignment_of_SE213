@@ -3,10 +3,11 @@
 #include <fstream>
 #include <vector>
 #include <ctype.h>
+#include <sstream>
+
 using namespace std;
 
-ifstream ipt("input.txt");
-ofstream opt("output.txt");
+stringstream ipt;
 const char print = ';';
 const char number = '8';
 const char name = 'a';
@@ -31,7 +32,7 @@ void set_value(string s, double d)
             return;
         }
     }
-    throw runtime_error("Variable undefined");
+    throw runtime_error("variable undefined");
 }
 
 double get_value(string s)
@@ -43,6 +44,7 @@ double get_value(string s)
             return var_table[i].value;
         }
     }
+    return 0;
 }
 
 double define_name(string var, double val)
@@ -159,7 +161,7 @@ Token Token_stream::get()
                 return Token(name, s);
             }
         }
-        throw runtime_error("Bad token");
+        throw runtime_error("bad token");
     }
     }
 }
@@ -187,11 +189,11 @@ double primary()
         {
             if (int(d) != d)
             {
-                throw runtime_error("Nunmber should be int");
+                throw runtime_error("number should be int");
             }
             if (d < 0)
             {
-                throw runtime_error("Nunmber should be above zero");
+                throw runtime_error("number should be above zero");
             }
             if (d == 0)
             {
@@ -213,11 +215,11 @@ double primary()
         {
             if (int(t.value) != t.value)
             {
-                throw runtime_error("Nunmber should be int");
+                throw runtime_error("number should be int");
             }
             if (t.value < 0)
             {
-                throw runtime_error("Nunmber should be above zero");
+                throw runtime_error("number should be above zero");
             }
             if (t.value == 0)
             {
@@ -244,11 +246,11 @@ double primary()
         {
             if (int(tmp) != tmp)
             {
-                throw runtime_error("Nunmber should be int");
+                throw runtime_error("number should be int");
             }
             if (tmp < 0)
             {
-                throw runtime_error("Nunmber should be above zero");
+                throw runtime_error("number should be above zero");
             }
             if (tmp == 0)
             {
@@ -351,8 +353,9 @@ void clean_up_mess()
     ts.ignore(print);
 }
 
-void calculate()
+string calculate(string input)
 {
+    ipt << input;
     double tmp;
     while (!ipt.eof())
     {
@@ -376,35 +379,29 @@ void calculate()
                 ts.putback(t);
             }
             set_value("ANS", tmp);
-            opt << get_value("ANS") << '\n';
         }
         catch (exception &e)
         {
             if (!ipt.eof())
-                opt << "error" << '\n';
+            {
+                return e.what();
+            }
             clean_up_mess();
         }
     }
+    string retval;
+    stringstream ss;
+    ss << get_value("ANS");
+    ss >> retval;
+    return retval;
 }
 
 int main()
 {
-    try
-    {
-        define_name("ANS", 0);
-        calculate();
-        opt.close();
-        cout << "Finished! Results saved in output.txt" << endl;
-    }
-    catch (exception &e)
-    {
-        cerr << "ERROR: " << e.what() << '\n';
-        return 1;
-    }
-    catch (...)
-    {
-        cerr << "Oops: unknown exception!\n";
-        return 2;
-    }
+    define_name("ANS", 0);
+    string input;
+    cin >> input;
+    string answer = calculate(input);
+    cout << "calculate() returns <" << answer << ">" << endl;
     return 0;
 }
