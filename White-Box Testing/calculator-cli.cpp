@@ -355,7 +355,9 @@ void clean_up_mess()
 
 string calculate(string input)
 {
+    define_name("ANS", 0);
     ipt << input;
+
     double tmp;
     while (!ipt.eof())
     {
@@ -394,14 +396,4 @@ string calculate(string input)
     ss << get_value("ANS");
     ss >> retval;
     return retval;
-}
-
-int main()
-{
-    define_name("ANS", 0);
-    string input;
-    cin >> input;
-    string answer = calculate(input);
-    cout << "calculate() returns <" << answer << ">" << endl;
-    return 0;
 }
