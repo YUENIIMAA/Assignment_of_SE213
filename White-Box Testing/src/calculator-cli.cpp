@@ -380,11 +380,11 @@ string Calculator::calculate(string input)
         }
         catch (exception &e)
         {
+            clean_up_mess();
             if (!ipt.eof())
             {
                 return e.what();
             }
-            clean_up_mess();
         }
     }
     string retval;
