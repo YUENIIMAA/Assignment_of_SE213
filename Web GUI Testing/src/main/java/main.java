@@ -39,8 +39,7 @@ public class main {
         /* test cookie */
         testCookie.run(chrome);
 
-        /* keep it running for now */
-        /*chrome.quit();*/
+        chrome.quit();
     }
 
 
