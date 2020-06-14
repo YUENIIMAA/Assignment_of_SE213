@@ -33,6 +33,9 @@ public class main {
         /* test change user avatar */
         testInfoChange.run(chrome);
 
+        /* test cookie */
+        testCookie.run(chrome);
+
         /* keep it running for now */
         /*chrome.quit();*/
     }

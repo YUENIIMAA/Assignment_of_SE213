@@ -39,11 +39,7 @@ public class testCreateTopic {
                 return d.findElement(By.xpath("/html/body/section/div/div[6]/div[3]/div[2]/div/div[1]/div[1]/textarea"));
             }
         });
-        //try {
-        //    Thread.sleep(500);
-        //} catch (InterruptedException e) {
-        //    e.printStackTrace();
-        //}
+
         textInput.sendKeys("这是一条完全没有意义的主题，仅用于完成论坛的WEB-GUI测试，打扰了。");
 
         WebElement sendButton = webDriver.findElement(By.xpath("/html/body/section/div/div[6]/div[3]/div[3]/div/button"));
