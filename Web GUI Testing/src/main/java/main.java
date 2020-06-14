@@ -1,7 +1,7 @@
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class mainTest {
+public class main {
 
     /* note: please set your program arguments to jaccount's username and password */
     public static void main(String[] args) {
@@ -24,9 +24,11 @@ public class mainTest {
         String url = "https://dev.bbs.sjtu.edu.cn";
         chrome.get(url);
 
+        /* login via jaccount */
         jaccount.login(chrome);
 
-        infoChangeTest.run();
+        /* test change user avatar */
+        testInfoChange.run(chrome);
 
         /* keep it running for now */
         /*chrome.quit();*/
