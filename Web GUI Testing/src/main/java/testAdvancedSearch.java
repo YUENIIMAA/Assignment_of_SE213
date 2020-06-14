@@ -46,7 +46,7 @@ public class testAdvancedSearch {
         if (point < 4) {
             System.out.print("[info] single check failed\n");
         } else {
-            System.out.print("[error] single check passed\n");
+            System.out.print("[info] single check passed\n");
         }
 
         /* test select them all at once */
