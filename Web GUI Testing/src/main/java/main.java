@@ -27,6 +27,9 @@ public class main {
         /* login via jaccount */
         jaccount.login(chrome);
 
+        /* test create new topic */
+        testCreateTopic.run(chrome);
+
         /* test change user avatar */
         testInfoChange.run(chrome);
 
